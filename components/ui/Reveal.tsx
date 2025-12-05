@@ -14,8 +14,8 @@ export const Reveal: React.FC<RevealProps> = ({
   children, 
   width = "100%", 
   delay = 0, 
-  duration = 0.9, 
-  yOffset = 30,
+  duration = 1.0, // Increased duration for smoother 'gliding' feel
+  yOffset = 20, // Reduced offset for subtle movement
   blur = false
 }) => {
   const ref = useRef(null);
@@ -32,8 +32,8 @@ export const Reveal: React.FC<RevealProps> = ({
     hidden: { 
       opacity: 0, 
       y: yOffset,
-      filter: blur ? "blur(12px)" : "blur(0px)",
-      scale: blur ? 0.98 : 1
+      filter: blur ? "blur(8px)" : "blur(0px)",
+      scale: blur ? 0.96 : 1
     },
     visible: { 
       opacity: 1, 
@@ -49,10 +49,13 @@ export const Reveal: React.FC<RevealProps> = ({
         variants={variants}
         initial="hidden"
         animate={mainControls}
+        style={{ willChange: "transform, opacity, filter" }} 
         transition={{ 
           duration: duration, 
           delay: delay, 
-          ease: [0.2, 0.65, 0.3, 0.9] // Smooth, refined easing
+          // Apple-style ease-out-quint / ease-out-expo
+          // Starts fast, decelerates extremely slowly for a premium 'settling' effect
+          ease: [0.22, 1, 0.36, 1] 
         }}
       >
         {children}

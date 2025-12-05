@@ -11,12 +11,13 @@ const stats = [
 
 const Counter = ({ value, suffix }: { value: number, suffix: string }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-20% 0px" });
+  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   
+  // Softer spring physics: lower stiffness, higher damping ratio (critically damped)
   const springValue = useSpring(0, {
-    damping: 30,
-    stiffness: 100,
-    duration: 2
+    damping: 60,
+    stiffness: 80,
+    mass: 1
   });
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export default function Stats() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 border-t border-zinc-800 pt-12">
           {stats.map((stat, index) => (
             <div key={index} className="flex flex-col">
-              <Reveal delay={index * 0.1} width="100%">
+              <Reveal delay={index * 0.15} width="100%">
                 <span className="text-6xl md:text-7xl font-semibold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-br from-white to-zinc-500 flex items-center">
                   <Counter value={stat.value} suffix={stat.suffix} />
                 </span>
@@ -62,10 +63,9 @@ export default function Stats() {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        transition={{ staggerChildren: 0.1 }}
-                        className="flex gap-8 md:gap-16 flex-wrap justify-center items-center grayscale hover:grayscale-0 transition-all duration-500"
+                        transition={{ staggerChildren: 0.1, duration: 1 }}
+                        className="flex gap-8 md:gap-16 flex-wrap justify-center items-center grayscale hover:grayscale-0 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
                     >
-                        {/* Improved typography for logos to look more like logos */}
                         <span className="text-xl font-semibold font-serif text-white/70">TATA Motors</span>
                         <span className="text-xl font-bold italic text-white/70">Mahindra</span>
                         <span className="text-xl font-bold tracking-widest text-white/70">L&T</span>
